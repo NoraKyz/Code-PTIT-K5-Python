@@ -1,3 +1,4 @@
+
 import re, collections, math, fractions, itertools
 
 n, k = list(map(int, input().split()))

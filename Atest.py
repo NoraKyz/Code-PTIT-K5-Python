@@ -1,6 +1,5 @@
-import re, collections, math, fractions, itertools
+import re, collections, math, fractions, itertools, bisect, sys
 
 t = int(input())
-
-for _ in range(t):
+print(t)
     

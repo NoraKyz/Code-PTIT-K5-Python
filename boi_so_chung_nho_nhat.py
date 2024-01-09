@@ -1,59 +1,48 @@
 import re, collections, math, fractions, itertools
 
-pr = [0] * 1000005
+isPrime = [True] * 1000005
+prime = [2]
 
 def sieve():
-    for i in range(2, 1000005, 2):
-        pr[i] = 2
+    for i in range(4, 1000005, 2):
+        isPrime[i] = False
     
     for i in range(3, 1000005, 2):
-        if pr[i] == 0:
-            for j in range(i, 1000005, i):
-                if pr[j] == 0:
-                    pr[j] = i
+        if isPrime[i] == True:
+            prime.append(i)
+            for j in range(i*i, 1000005, i):
+                isPrime[j] = False
 
 sieve()
 
-f = [1] * 1000005
-
-def prepare():
+def phantich(n):
     d = {}
-    res = 1
-    for i in range(2, 1000005):
-        res *= i
+    for i in prime:
+        if i > n:
+            break
 
-        x = res 
-        while x > 1:
-            f[i][pr[x]] = f[i].get(pr[x], 0) + 1
-            x //= pr[x]
+        tmp = n
 
-        for i in d:
-            f[i] = f[i] * (d[i] + 1) % 1000000007
-        return res * 2 + 1
+        while tmp > 0:
+            d[i] = d.get(i, 0) + tmp // i
+            tmp = tmp // i
 
-prepare()
-
-print(f[10])
+    return d
 
 def solve(a, b):
     d = {}
 
-    for i in range(a, b+1):
-        x = i
-        while x > 1:
-            d[pr[x]] = d.get(pr[x], 0) + 1
-            x //= pr[x]
+    d1 = phantich(a-1) 
+    d2 = phantich(b)
+
+    for i in d2:
+        d[i] = d2[i] - d1.get(i, 0)
 
     res = 1
+    for i in d:
+        res = res * (d[i] * 2 + 1) % 1000000007
 
-    if(a == b):
-        for i in d:
-            res = res * (d[i] + 1) % 1000000007
-        return res * 2 - 1
-    else :
-        for i in d:
-            res = res * (d[i] + 1) % 1000000007
-        return res * 2 + 1
+    return res
 
 t = int(input())
 for _ in range(t):
